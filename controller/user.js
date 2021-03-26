@@ -39,7 +39,12 @@ class Student {
           res.status(401).send("Invalid Password");
         } else {
           const token = JWTsign(user._id);
-          res.send({ token, UserId: user.Rid, Designation: user.Designation });
+          res.send({
+            token,
+            UserName: user.Name,
+            UserId: user.Rid,
+            Designation: user.Designation,
+          });
         }
       });
     } catch (error) {
