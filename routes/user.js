@@ -5,4 +5,5 @@ const user = require('../controller/user')
 router.post('/login', user.Login);
 router.post('/register', user.Register);
 router.post('/incomingnotification',user.IncomeNotification)
+router.post('/createnotification',user.CreateNotification)
 module.exports = router;

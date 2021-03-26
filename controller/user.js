@@ -64,15 +64,15 @@ class Student {
           if (err) {
             console.log(err);
           }
-        
+          console.log(recpts)
             
             recpts.forEach(Recipient => {
-              Notifications.findOne({ _id: Recipient.nid}, (err, Notification) => {
+              Notifications.findOne({ _id: Recipient.Nid}, (err, Notification) => {
                 if (err) {
                   console.log(err);
                 }
                 else{
-
+                  console.log(Notification)
                   let element={
                     attachmentURL:Notification.AttachmentURL,
                     message:Notification.Message,
@@ -92,9 +92,24 @@ class Student {
         console.log(error);
       }
     }
+    
     static async CreateNotification(req,res){
       try {
-
+        const body = req.body;
+        console.log(body)
+        const {Rid,...remaing}=body
+        console.log(Rid)
+        const notification = new Notifications(remaing);
+        notification.save((err,message)=>{
+          if(err)console.log(res);
+          else {
+            const recipt = new Recipients({Nid:message._id,Status:false,Rid:Rid});
+            recipt.save((err,recipt)=>{
+              if(err)console.log(err);
+              else res.send(recipt)
+            })
+          }
+        })
       }catch(err){
         console.log(err)
       }
