@@ -56,7 +56,7 @@ class Student {
     }
   }
   static async SeenNotification(req,res){
-    Notifications.updateOne({_id:req.body._id},{Status:True});
+    Recipients.updateOne({Nid:req.body.nid,Rid:req.body.rid},{Status:True});
   }
     // static async IncomeNotification(req,res){
     //   try {
