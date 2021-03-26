@@ -55,44 +55,79 @@ class Student {
       console.log(error);
     }
   }
-    static async IncomeNotification(req,res){
-      try {
-        const body = req.body;
-        var Rid=body.Rid;
-        var outList=[]
-          Recipients.find({ Rid: Rid }, (err, recpts) => {
-          if (err) {
-            console.log(err);
-          }
-          console.log(recpts)
-            
-            recpts.forEach(Recipient => {
-              Notifications.findOne({ _id: Recipient.Nid}, (err, Notification) => {
-                if (err) {
-                  console.log(err);
-                }
-                else{
-                  console.log(Notification)
-                  let element={
-                    attachmentURL:Notification.AttachmentURL,
-                    message:Notification.Message,
-                    sender:Notification.Sender,
-                    time:Notification.createdAt,
-                    status:Recipient.Status
-                  }
-                  outList.push(element);
+    // static async IncomeNotification(req,res){
+    //   try {
+    //     const body = req.body;
+    //     var Rid=body.Rid;
+    //     var outList=[]
+    //       var recpts=[];
+	// 		Recipients.find({ Rid: Rid }, async(err, recpts) => {
+    //       if (err) {
+    //         console.log(err);
+    //       }
+    //       return recpts;
+    //     });
+	// 	const getmsg = async (recpts)=>{
+    //         recpts.forEach(Recipient => {
+    //           Notifications.findOne({ _id: Recipient.Nid}, (err, Notification) => {
+    //             if (err) {
+    //               console.log(err);
+    //             }
+    //             else{
+    //               console.log(Notification)
+    //               let element={
+    //                 attachmentURL:Notification.AttachmentURL,
+    //                 message:Notification.Message,
+    //                 sender:Notification.Sender,
+    //                 time:Notification.createdAt,
+    //                 status:Recipient.Status
+    //               }
+    //               outList.push(element);
                   
-                }
-            });
-            
-          });
-        });
-        res.send(outList);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    
+    //             }
+    //         });
+    //       });
+    //       return outList;
+    //       }
+	// 	res.send(getmsg(recpts));
+        
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
+    static async IncomeNotification(req,res){
+		try {
+		  const body = req.body;
+		  var Rid=body.Rid;
+		  var outList=[]
+			const recpts = await Recipients.find({ Rid: Rid });//(err, recpts) => {
+			// if (err) {
+			//   console.log(err);
+			// }
+			// console.log(recpts)
+			  
+			  for(const Recipient of recpts){
+				const Notification= await Notifications.findOne({ _id: Recipient.Nid});//, (err, Notification) => {
+				  // if (err) {
+				  //   console.log(err);
+				  // }
+				  // else{
+					console.log(Notification)
+					let element={
+					  attachmentURL:Notification.AttachmentURL,
+					  message:Notification.Message,
+					  sender:Notification.Sender,
+					  time:Notification.createdAt,
+					  status:Recipient.Status
+					}
+					outList.push(element);
+					
+				  }
+		  res.send(outList);
+		} catch (error) {
+		  console.log(error);
+		}
+	  }
     static async CreateNotification(req,res){
       try {
         const body = req.body;
