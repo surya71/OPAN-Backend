@@ -169,7 +169,7 @@ class Student {
             notification.save((err,message)=>{
             if(err)console.log(res);
             else {
-              Users.find({year:body.to.year},(err,yearUsers)=>{
+              Users.find({Year:body.year},(err,yearUsers)=>{
                 for(let user of yearUsers){
                   const recipt = new Recipients({Nid:message._id,Status:false,Rid:user.Rid});
                   recipt.save((err,recipt)=>{
