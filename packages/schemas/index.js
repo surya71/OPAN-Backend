@@ -1,5 +1,5 @@
-const {studentLoginSchema} = require('./student');
+const {UserSchema} = require('./student');
 
 module.exports = {
-    studentLoginSchema
+    UserSchema
 }
