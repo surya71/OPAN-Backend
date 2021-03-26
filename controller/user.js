@@ -56,7 +56,9 @@ class Student {
     }
   }
   static async SeenNotification(req,res){
-    Recipients.updateOne({Nid:req.body.nid,Rid:req.body.rid},{Status:True});
+    Recipients.updateOne({Nid:req.body.nid,Rid:req.body.rid},{Status:true},(err,r)=>{
+      console.log()
+    });
   }
     // static async IncomeNotification(req,res){
     //   try {
@@ -141,7 +143,7 @@ class Student {
           console.log(user)
         
         console.log(Sender);
-        if(body.to.Rid)
+        if(body.tRid!==undefined)
         {
           const notification = new Notifications({Sender : Sender.Rid,
             Sender_Desigination:Sender.Designation,
@@ -151,13 +153,13 @@ class Student {
           notification.save((err,message)=>{
           if(err)console.log(res);
           else {
-            const recipt = new Recipients({Nid:message._id,Status:false,Rid:body.to.Rid});
+            const recipt = new Recipients({Nid:message._id,Status:false,Rid:body.tRid});
             recipt.save((err,recipt)=>{
               if(err)console.log(err);
             })
           }
         })
-        }else if(body.to.year)
+        }else if(body.year!==undefined)
         {
             const notification = new Notifications({Sender : Sender.Rid,
               Sender_Desigination:Sender.Designation,
