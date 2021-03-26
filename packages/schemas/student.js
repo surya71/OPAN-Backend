@@ -1,14 +1,24 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const studentLoginSchema =new Schema({
-    Reg_no: String,
+const UserSchema =new Schema({
+    Rid: String,
     Name: String,
+    Designation:{
+        type : "String",
+        enum : ['student','HOD','classAdvisor','principal','PD','other'],
+        default:'other'
+    },
     Department: String,
     Year: Number,
     EmailId:String,
     Password: String,
     DOB:Date,
-    Gender:String
+    DOJ:Date,
+    Gender: {
+        type : "String",
+        enum : ['male','female','other'],
+        default:'other'
+    }
     });
-module.exports = {studentLoginSchema};
+module.exports = {UserSchema};
