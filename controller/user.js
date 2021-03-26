@@ -118,7 +118,8 @@ class Student {
 					  message:Notification.Message,
 					  sender:Notification.Sender,
 					  time:Notification.createdAt,
-					  status:Recipient.Status
+					  status:Recipient.Status,
+            nid:Notification._id
 					}
 					outList.push(element);
 					
@@ -131,20 +132,77 @@ class Student {
     static async CreateNotification(req,res){
       try {
         const body = req.body;
-        console.log(body)
-        const {Rid,...remaing}=body
-        console.log(Rid)
-        const notification = new Notifications(remaing);
-        notification.save((err,message)=>{
+        let Sender ;
+        Users.find({Rid:body.Rid},(err,user)=>{
+          Sender = user[0];
+          console.log(user)
+        
+        console.log(Sender);
+        if(body.to.Rid)
+        {
+          const notification = new Notifications({Sender : Sender.Rid,
+            Sender_Desigination:Sender.Designation,
+            Sender_Name:Sender.Name,
+            Message : body.Message,
+            AttachmentURL : body.AttachmentURL});
+          notification.save((err,message)=>{
           if(err)console.log(res);
           else {
-            const recipt = new Recipients({Nid:message._id,Status:false,Rid:Rid});
+            const recipt = new Recipients({Nid:message._id,Status:false,Rid:body.to.Rid});
             recipt.save((err,recipt)=>{
               if(err)console.log(err);
               else res.send(recipt)
             })
           }
         })
+        }else if(body.to.year)
+        {
+            const notification = new Notifications({Sender : Sender.Rid,
+              Sender_Desigination:Sender.Designation,
+              Sender_Name:Sender.Name,
+              Message : body.Message,
+              AttachmentURL : body.AttachmentURL});
+            notification.save((err,message)=>{
+            if(err)console.log(res);
+            else {
+              Users.find({year:body.to.year},(err,yearUsers)=>{
+                for(let user of yearUsers){
+                  const recipt = new Recipients({Nid:message._id,Status:false,Rid:user.Rid});
+                  recipt.save((err,recipt)=>{
+                    if(err)console.log(err);
+                    else res.send(recipt)
+                  })
+                }
+              
+            }
+          )
+            }  
+            })
+        }else{
+          const notification = new Notifications({Sender : Sender.Rid,
+            Sender_Desigination:Sender.Designation,
+            Sender_Name:Sender.Name,
+            Message : body.Message,
+            AttachmentURL : body.AttachmentURL});
+          notification.save((err,message)=>{
+          if(err)console.log(res);
+          else {
+            Users.find({},(err,yearUsers)=>{
+              for(let user of yearUsers){
+                const recipt = new Recipients({Nid:message._id,Status:false,Rid:user.Rid});
+                recipt.save((err,recipt)=>{
+                  if(err)console.log(err);
+                  else res.send(recipt)
+                })
+              }
+            
+          }
+        )
+          }  
+          })
+        }
+        res.send()
+      });
       }catch(err){
         console.log(err)
       }

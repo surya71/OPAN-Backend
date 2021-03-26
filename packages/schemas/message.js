@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const NotificationSchema = new Schema({
-    
     Sender : String,
+    Sender_Desigination:String,
+    Sender_Name:String,
     Message : String,
     AttachmentURL : String,
 },{timestamps:true}
