@@ -6,4 +6,6 @@ router.post('/login', user.Login);
 router.post('/register', user.Register);
 router.post('/incomingnotification',user.IncomeNotification)
 router.post('/createnotification',user.CreateNotification)
+router.post('/seennotification',user.SeenNotification)
+
 module.exports = router;
