@@ -55,6 +55,9 @@ class Student {
       console.log(error);
     }
   }
+  static async SeenNotification(req,res){
+    Notifications.updateOne({_id:req.body._id},{Status:True});
+  }
     // static async IncomeNotification(req,res){
     //   try {
     //     const body = req.body;
