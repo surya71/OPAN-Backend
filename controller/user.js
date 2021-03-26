@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { Users } = require("../models/index");
+const { Users,Recipients,Notifications } = require("../models/index");
 const {JWTsign} = require('../packages/auth/tokenize');
 
 mongoose.connect(
@@ -13,17 +13,6 @@ db.once("open", function () {
   console.log("mongodb connected!");
 });
 
-// const MongoClient = require('mongodb').MongoClient;
-// const uri = "mongodb+srv://admin:123@cluster0.o42dd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-// const db = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-// db.connect(err => {
-//   if(err){
-//     console.log(err);
-//   }
-//   else{
-//     console.log("MongoDB connected");
-//   }
-// });
 class Student{
     static async Login(req,res){
       try {
@@ -60,6 +49,50 @@ class Student{
           } catch (error) {
             console.log(error);
           }
+    }
+    static async IncomeNotification(req,res){
+      try {
+        const body = req.body;
+        var Rid=body.Rid;
+        var outList=[]
+          Recipients.find({ Rid: Rid }, (err, recpts) => {
+          if (err) {
+            console.log(err);
+          }
+        
+            
+            recpts.forEach(Recipient => {
+              Notifications.findOne({ _id: Recipient.nid}, (err, Notification) => {
+                if (err) {
+                  console.log(err);
+                }
+                else{
+
+                  let element={
+                    attachmentURL:Notification.AttachmentURL,
+                    message:Notification.Message,
+                    sender:Notification.Sender,
+                    time:Notification.createdAt,
+                    status:Recipient.Status
+                  }
+                  outList.push(element);
+                  
+                }
+            });
+            
+          });
+        });
+        res.send(outList);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    static async CreateNotification(req,res){
+      try {
+
+      }catch(err){
+        console.log(err)
+      }
     }
 }
 
