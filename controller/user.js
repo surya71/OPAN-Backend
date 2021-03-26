@@ -26,7 +26,25 @@ db.once("open", function () {
 // });
 class Student{
     static async Login(req,res){
-
+      try {
+        const body = req.body;
+          Users.findOne({ Rid: body.Rid }, (err, user) => {
+          if (err) {
+            console.log(err);
+          }
+          // console.log(consignee);
+          if (!user) {
+            res.status(401).send("Invalid user Id");
+          } else if (body.Password !== user.Password) {
+            res.status(401).send("Invalid Password");
+          } else {
+            const token = JWTsign(user._id);
+            res.send({ token ,Designation:user.Designation});
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
     static async Register(req,res){
         try {
@@ -35,8 +53,8 @@ class Student{
               if (error) {
                 return res.status(500).send("Invalid");
               } else {
-               
-                res.send(user);
+                const token = JWTsign(user._id);
+                res.send({ token ,Designation:user.Designation});
               }
             });
           } catch (error) {
