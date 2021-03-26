@@ -151,7 +151,6 @@ class Student {
             const recipt = new Recipients({Nid:message._id,Status:false,Rid:body.to.Rid});
             recipt.save((err,recipt)=>{
               if(err)console.log(err);
-              else res.send(recipt)
             })
           }
         })
@@ -192,7 +191,6 @@ class Student {
                 const recipt = new Recipients({Nid:message._id,Status:false,Rid:user.Rid});
                 recipt.save((err,recipt)=>{
                   if(err)console.log(err);
-                  else res.send(recipt)
                 })
               }
             
